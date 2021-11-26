@@ -5,10 +5,13 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
-  Link,
-  Outlet,
-  useParams
+  Navigate,   // we use this to navigate any other url to a particular url like /myapps to /learn
+  Link,       // we use this at a place of anchor (a) tag.
+  Outlet,     // we use this to set that where we want to show content.
+  useParams,   // we use this to get url params
+  NavLink,
+  useNavigate,
+  useLocation
 } from 'react-router-dom';
 
 ReactDOM.render(
@@ -35,6 +38,8 @@ ReactDOM.render(
         <Route path="bundles" element={<Bundles />} />
       </Route>
 
+      <Route path="/dashboard" element={<Dashboard />} />
+
     </Routes>
 
   </Router>,
@@ -56,7 +61,11 @@ function Learn() {
     <div>
       <h1>Learn</h1>
       <h4>All courses are listed here...</h4>
+
+
       <Link style={{ padding: "8px 19px 10px 19px", textDecoration: "none", backgroundColor: "black", borderRadius: "5px", margin: "5px", color: "white" }} to="/learn/courses">courses</Link>
+
+
       <Link style={{ padding: "8px 19px 10px 19px", textDecoration: "none", backgroundColor: "blue", borderRadius: "5px", margin: "5px", color: "white" }} to="/learn/bundles">bundle</Link>
 
 
@@ -68,10 +77,35 @@ function Learn() {
 
 
 function Courses() {
+  const courseName = ["React", "Nodejs", "Angular", "Vue", "Django"];
+  const courseId = courseName[Math.floor(Math.random() * courseName.length)];
+
   return (
     <div>
       <h1>Courses List</h1>
       <h4>Course Card</h4>
+
+      {/* By this way we can show that which tab is active now */}
+
+      <NavLink to={`/learn/courses/${courseId}`} style={({ isActive }) => { return { backgroundColor: isActive ? "black" : "blue", padding: "8px 19px 10px 19px", textDecoration: "none", borderRadius: "5px", margin: "5px", color: "white" } }} >
+        {courseId}
+      </NavLink>
+
+      <NavLink to={`/learn/courses/tests`} style={({ isActive }) => { return { backgroundColor: isActive ? "black" : "blue", padding: "8px 19px 10px 19px", textDecoration: "none", borderRadius: "5px", margin: "5px", color: "white" } }} >
+        Tests
+      </NavLink>
+
+
+      <NavLink to={`/learn/courses/model`} style={({ isActive }) => { return { backgroundColor: isActive ? "black" : "blue", padding: "8px 19px 10px 19px", textDecoration: "none", borderRadius: "5px", margin: "5px", color: "white" } }} >
+        Model Papers
+      </NavLink>
+
+
+      <NavLink to={`/learn/courses/assignment`} style={({ isActive }) => { return { backgroundColor: isActive ? "black" : "blue", padding: "8px 19px 10px 19px", textDecoration: "none", borderRadius: "5px", margin: "5px", color: "white" } }} >
+        Assignments
+      </NavLink>
+
+
       <Outlet />
     </div>
   )
@@ -91,9 +125,32 @@ function Bundles() {
 function Courseid() {
   // To fetch url data we have to use useParams and it already look all params so we don't need to use :
   const { courseid } = useParams();
+
+  // We use navigate to redirect user and to hold data from one component to other component
+  const navigate = useNavigate();
+  
   return (
     <div>
-      <p>User has selected {courseid} course.</p>
+      <h2>User has selected {courseid} course.</h2>
+
+      {/* There are two ways to transfer data (navigate and Link) and we use state to set data which we want to transfer */}
+      <button style={{ padding: "8px 19px 10px 19px", textDecoration: "none", backgroundColor: "black", borderRadius: "5px", margin: "5px", color: "white"}}onClick={() => {
+        navigate("/dashboard", {state: "399"});
+      }}>Price</button>
+
+      <Link to="/dashboard" state={courseid} >Random</Link>
     </div>
   )
 };
+
+function Dashboard() {
+  // Here we are getting data which is transfered by useNavigate and we use useLocation to get data
+  const location = useLocation();
+
+  return (
+    <div>
+      {/* Here we are setting data which is getting through useNavigate */}
+      <h1>Price for your course is {location.state}</h1>
+    </div>
+  )
+}
