@@ -5,13 +5,13 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,   // we use this to navigate any other url to a particular url like /myapps to /learn
-  Link,       // we use this at a place of anchor (a) tag.
-  Outlet,     // we use this to set that where we want to show content.
-  useParams,   // we use this to get url params
-  NavLink,
-  useNavigate,
-  useLocation
+  Navigate,     // we use this to navigate any other url to a particular url like /myapps to /learn
+  Link,         // we use this at a place of anchor (a) tag.
+  Outlet,       // we use this to set that where we want to show content.
+  useParams,    // we use this to get url params
+  NavLink,      // we use this to set with active url
+  useNavigate,  // we use this to send data from one url to another
+  useLocation   // we use this to get data which transfered by useNavigate()
 } from 'react-router-dom';
 
 ReactDOM.render(
@@ -128,7 +128,7 @@ function Courseid() {
 
   // We use navigate to redirect user and to hold data from one component to other component
   const navigate = useNavigate();
-  
+
   return (
     <div>
       <h2>User has selected {courseid} course.</h2>
